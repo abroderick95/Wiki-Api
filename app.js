@@ -13,13 +13,19 @@ app.use(
     extended: true,
   })
 );
-app.use(express.static("public"));
 
-app.listen(3000, function () {
-  console.log("Winter Solstice Wiki server served OwO");
-});
+app.use(express.static("public"));
 
 const wikiSchema = new mongoose.Schema({
   title: String,
   content: String,
+});
+
+// eslint-disable-next-line no-undef
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+app.listen(port, function () {
+  console.log("Winter Solstice Wiki server served OwO");
 });
