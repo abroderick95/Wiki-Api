@@ -23,9 +23,12 @@ const Article = mongoose.model("Article", articleSchema);
 
 app.get("/articles", function (req, res) {
   Article.find(function (err, articlesRetrieved) {
-    console.log(articlesRetrieved);
+    if (!err) {
+      res.send(articlesRetrieved);
+    } else {
+      res.send(err);
+    }
   });
-  res.end();
 });
 
 // eslint-disable-next-line no-undef
