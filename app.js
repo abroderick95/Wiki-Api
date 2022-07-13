@@ -31,6 +31,20 @@ app.get("/articles", function (req, res) {
   });
 });
 
+app.post("/articles", function (req, res) {
+  const newArticle = new Article({
+    title: req.body.title,
+    content: req.body.content,
+  });
+  newArticle.save(function (err) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send("Data posted successfully!");
+    }
+  });
+});
+
 // eslint-disable-next-line no-undef
 let port = process.env.PORT;
 if (port == null || port == "") {
