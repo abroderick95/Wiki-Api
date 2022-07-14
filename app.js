@@ -26,6 +26,48 @@ app.get("/favicon.ico", function (req, res) {
 });
 
 app
+  .route("/articles/:existingArticleRequest")
+
+  .get(function (req, res) {
+    Article.findOne(
+      { title: req.params.existingArticleRequest },
+      function (err, wikiArticleFound) {
+        if (wikiArticleFound === null) {
+          res.send(
+            "No articles matching title '" +
+              req.params.existingArticleRequest +
+              "' were found."
+          );
+          console.log(wikiArticleFound + " does not exist.");
+        } else if (!err) {
+          console.log(wikiArticleFound.title + " article found!");
+          res.send(wikiArticleFound);
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  })
+
+  .put(function (req, res) {
+    Article.replaceOne(
+      { title: req.params.existingArticleRequest },
+      { title: req.body.title, content: req.body.content },
+      { overwrite: true },
+      function (err) {
+        if (!err) {
+          res.send(
+            req.params.existingArticleRequest + " updated successfully!"
+          );
+        } else {
+          console.log(err);
+          res.send(err);
+        }
+      }
+    );
+  });
+
+app
   .route("/articles")
 
   .get(function (req, res) {
@@ -36,20 +78,6 @@ app
         res.send(err);
       }
     });
-  })
-
-  .get(function (req, res) {
-    Article.findOne(
-      { title: req.body.title },
-      function (err, wikiArticleFound) {
-        if (!err) {
-          console.log("Article found!");
-          res.send(wikiArticleFound);
-        } else {
-          res.send(err);
-        }
-      }
-    );
   })
 
   .post(function (req, res) {
