@@ -38,6 +38,20 @@ app
     });
   })
 
+  .get(function (req, res) {
+    Article.findOne(
+      { title: req.body.title },
+      function (err, wikiArticleFound) {
+        if (!err) {
+          console.log("Article found!");
+          res.send(wikiArticleFound);
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  })
+
   .post(function (req, res) {
     const newArticle = new Article({
       title: req.body.title,
