@@ -25,29 +25,42 @@ app.get("/favicon.ico", function (req, res) {
   res.end();
 });
 
-app.get("/articles", function (req, res) {
-  Article.find(function (err, articlesRetrieved) {
-    if (!err) {
-      res.send(articlesRetrieved);
-    } else {
-      res.send(err);
-    }
-  });
-});
+app
+  .route("/articles")
 
-app.post("/articles", function (req, res) {
-  const newArticle = new Article({
-    title: req.body.title,
-    content: req.body.content,
+  .get(function (req, res) {
+    Article.find(function (err, articlesRetrieved) {
+      if (!err) {
+        res.send(articlesRetrieved);
+      } else {
+        res.send(err);
+      }
+    });
+  })
+
+  .post(function (req, res) {
+    const newArticle = new Article({
+      title: req.body.title,
+      content: req.body.content,
+    });
+    newArticle.save(function (err) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send("Data posted successfully!");
+      }
+    });
+  })
+
+  .delete(function (req, res) {
+    Article.deleteMany(function (err) {
+      if (!err) {
+        res.send("All articles deleted successfully.");
+      } else {
+        res.send(err);
+      }
+    });
   });
-  newArticle.save(function (err) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send("Data posted successfully!");
-    }
-  });
-});
 
 // eslint-disable-next-line no-undef
 let port = process.env.PORT;
