@@ -21,6 +21,10 @@ const articleSchema = {
 };
 const Article = mongoose.model("Article", articleSchema);
 
+app.get("/favicon.ico", function (req, res) {
+  res.end();
+});
+
 app.get("/articles", function (req, res) {
   Article.find(function (err, articlesRetrieved) {
     if (!err) {
