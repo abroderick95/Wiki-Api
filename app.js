@@ -57,10 +57,48 @@ app
       function (err) {
         if (!err) {
           res.send(
+            req.params.existingArticleRequest + " changed successfully!"
+          );
+        } else {
+          console.log(err);
+          res.send(err);
+        }
+      }
+    );
+  })
+
+  .patch(function (req, res) {
+    Article.updateOne(
+      { title: req.params.existingArticleRequest },
+      { $set: { title: req.body.title, content: req.body.content } },
+      { overwrite: true },
+      function (err) {
+        if (!err) {
+          res.send(
             req.params.existingArticleRequest + " updated successfully!"
           );
         } else {
           console.log(err);
+          res.send(err);
+        }
+      }
+    );
+  })
+
+  .delete(function (req, res) {
+    Article.findOneAndDelete(
+      { title: req.params.existingArticleRequest },
+      function (err, wikiArticleFound) {
+        if (wikiArticleFound === null) {
+          res.send(
+            "No articles matching title '" +
+              req.params.existingArticleRequest +
+              "' were found."
+          );
+        } else if (!err) {
+          console.log("'" + wikiArticleFound.title + "' deleted successfully.");
+          res.send("'" + wikiArticleFound.title + "' deleted successfully.");
+        } else {
           res.send(err);
         }
       }
